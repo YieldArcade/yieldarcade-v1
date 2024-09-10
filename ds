@@ -1,0 +1,269 @@
+[33mcommit 34dc25d8c93e1aa275ce985e830904289b6cf5b0[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: mudassir45 <mudassirali36@gmail.com>
+Date:   Mon Sep 9 14:00:10 2024 +0500
+
+    forge install: forge-std
+    
+    v1.9.2
+
+[33mcommit 7368bd34d60e93241db46b0de0f6bdc42f4f1605[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Paul Razvan Berg <prberg@proton.me>
+Date:   Fri Aug 30 16:20:50 2024 +0300
+
+    ci: rename "Use Template" workflow
+
+[33mcommit 45146b02824e5fbfa3b474f4e8abfe4785448ed6[m
+Merge: 109802e 06e5fe6
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Fri Aug 30 15:20:03 2024 +0200
+
+    Merge pull request #59 from arr00/main
+    
+    Run create workflow on `push`
+
+[33mcommit 06e5fe64dc4b8ad84b9a1d1d3a490669422ba0e0[m
+Author: Arr00 <13561405+arr00@users.noreply.github.com>
+Date:   Wed Aug 28 18:34:28 2024 -0400
+
+    Run create workflow on `push`
+
+[33mcommit 109802ec3f70d9776660117cadff51e3ba0d53e2[m
+Author: Paul Razvan Berg <prberg@proton.me>
+Date:   Mon Jul 22 17:44:28 2024 +0300
+
+    fix: fix stale 'lib' path
+
+[33mcommit 2433cbad5b7c65cd3eca72987aac531a24be9254[m
+Author: Paul Razvan Berg <prberg@proton.me>
+Date:   Fri Jun 28 16:54:40 2024 +0300
+
+    chore: remove ".gitmodules"
+
+[33mcommit b610553a2eb0947445054bcdf1ae784a861ca15b[m
+Author: Paul Razvan Berg <prberg@proton.me>
+Date:   Fri Jun 28 16:52:06 2024 +0300
+
+    forge install: prb-math
+    
+    v4.0.3
+
+[33mcommit 9fd15fdbb2929ef36a0b505a57c6c2c8fe40f7aa[m
+Author: Paul Razvan Berg <prberg@proton.me>
+Date:   Thu Jun 27 14:15:46 2024 +0300
+
+    build: update bun lockfile
+
+[33mcommit 12f22a903955fa840a3a71273dfcb0c7d671f574[m
+Merge: 0948d06 188004e
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Thu Jun 13 17:32:15 2024 +0100
+
+    Merge pull request #54 from PaulRBerg/chore/update-funding-url
+    
+    chore: update funding url
+
+[33mcommit 188004ed4db51a29c9efaa9a51555794aabac35c[m
+Author: Paul Razvan Berg <prberg@proton.me>
+Date:   Thu Jun 13 17:30:35 2024 +0100
+
+    chore: update funding url
+
+[33mcommit 0948d06ff18b2fbbbef4986a88a5c3aea9aac030[m
+Merge: baa2fb5 6325179
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sat May 25 08:44:35 2024 +0100
+
+    Merge pull request #52 from dalechyn/patch-1
+    
+    chore: add base network
+
+[33mcommit 6325179ca66bef7a2661c526def73c324c2e7eeb[m
+Author: Vladyslav Dalechyn <vlad.dalechin@gmail.com>
+Date:   Fri May 24 18:33:20 2024 +0300
+
+    chore: add base network
+
+[33mcommit baa2fb5205db9576c7588834470e9bee51516469[m
+Author: Paul Razvan Berg <prberg@proton.me>
+Date:   Wed May 15 18:35:36 2024 +0100
+
+    refactor: switch to Shanghai EVM
+
+[33mcommit 77f8e8d316819e513a5621b4f20e35e7ef3f428c[m
+Merge: d9554ea a46a5b6
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Tue Apr 16 19:38:10 2024 +0300
+
+    Merge pull request #50 from PaulRBerg/refactor/remove-prb-test
+    
+    refactor: use Test instead of PRBTest
+
+[33mcommit a46a5b6a6fcbaa0f8b0aea809ebdff465bbae375[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Tue Apr 16 17:34:31 2024 +0100
+
+    refactor: use Test instead of PRBTest
+    
+    build: bump "forge-std"
+    refactor: remove PRBTest
+
+[33mcommit d9554eaf7b8fde939fca5a3815bef4a27a6bb155[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Fri Apr 5 11:58:51 2024 +0100
+
+    build: upgrade to Solidity v0.8.25
+
+[33mcommit 0272adf88fec9f7ed11d258b5e97c6c0d798fc84[m
+Author: Mario Gutiérrez Valero <m.gutierrez.valero@me.com>
+Date:   Wed Mar 27 15:12:57 2024 +0100
+
+    Fix prettier globs (#49)
+    
+    * fix: :adhesive_bandage: fix prettier globs in package.json
+    
+    * chore: :adhesive_bandage: modify prettier glob to make it Windows compatible
+    
+    * chore: update ignore path glob
+    
+    ---------
+    
+    Co-authored-by: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+
+[33mcommit 4266b9a3e17f67e9f73567926684e3595849f8fc[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Tue Mar 19 12:38:23 2024 +0000
+
+    docs: bump copyright year in license
+
+[33mcommit c999eb96441484fcad18ae571dfb49a5df68411e[m
+Merge: c4e62a0 3ccf367
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Wed Jan 17 14:09:06 2024 +0200
+
+    Merge pull request #45 from ahmedali8/chore/gitpod-config
+    
+    chore: add gitpod config
+
+[33mcommit 3ccf36781a8be512d53177e750af62c4b147f7ef[m
+Author: Ahmed Ali <imahmedalibhatti@gmail.com>
+Date:   Mon Jan 15 21:27:13 2024 +0000
+
+    fix: use forge-std github tag
+
+[33mcommit 617ade1dbe05f5b20c744ed06f9d96190147af1a[m
+Author: Ahmed Ali <imahmedalibhatti@gmail.com>
+Date:   Mon Jan 15 21:03:04 2024 +0000
+
+    chore: add gitpod config
+
+[33mcommit c4e62a063435958848dcbc1e0ec01bf687ee2f61[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Tue Jan 9 14:41:59 2024 +0200
+
+    ci: use v4 of actions/checkout
+
+[33mcommit 570e71378560a89b17c0ef710c8d1eb2ac77e22b[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sun Dec 31 12:17:56 2023 +0200
+
+    ci: remove node.js installation step
+    
+    https://github.com/oven-sh/setup-bun/issues/46
+
+[33mcommit cdd776a6819818b08e3a0adbc3809e91e5d4c8c2[m
+Merge: 3e3879f 4a5373d
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sun Dec 31 11:09:15 2023 +0200
+
+    Merge pull request #39 from PaulRBerg/build/bun
+    
+    build: switch to bun for dep management
+
+[33mcommit 3e3879fee5199ccba92873dcc2826c73701872e8[m
+Merge: eb0afd6 3d47773
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sun Dec 31 11:08:34 2023 +0200
+
+    Merge pull request #38 from PaulRBerg/feat/open-zeppelin
+    
+    build: add OpenZeppelin as dependency
+
+[33mcommit 4a5373dcd0b19ceb857f1e51cee13c19231683fb[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sat Dec 30 21:07:05 2023 +0200
+
+    build: switch to bun for dep management
+
+[33mcommit 3d47773555d3f7df956aaba0fdb6a0002e6d78a0[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sat Dec 30 20:47:01 2023 +0200
+
+    build: add OpenZeppelin as dep
+    
+    docs: document how to install dependencies
+
+[33mcommit eb0afd687e82ab510ecf4f67a2a1d858c248f93b[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sat Dec 30 20:58:31 2023 +0200
+
+    chore: nuke out "lib"
+
+[33mcommit 43eaacba43d8da5505f42520ca055983db0f6dde[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sat Dec 30 20:36:56 2023 +0200
+
+    docs: update Solhint reference
+
+[33mcommit 89c93bd4f08c15a86793c44b594d9057e3475e6c[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sun Dec 24 18:32:27 2023 +0200
+
+    docs: update crypto funding URL
+
+[33mcommit fcc743888370871c06a9691f3b27f9735858fff0[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Wed Dec 20 01:08:44 2023 +0200
+
+    build: use solc v0.8.23
+
+[33mcommit 2fbc24e0932fc7908c8ae5791028bb1ee61d6224[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Mon Dec 18 12:25:53 2023 +0200
+
+    chore: remove "libs" config
+
+[33mcommit ff7c914a8c50f05c90705a8168110b6cac3f4033[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sun Dec 17 13:44:39 2023 +0200
+
+    build: install deps using Node.js
+    
+    chore: remove git submodules
+    refactor: update import paths
+
+[33mcommit df6e78a70f04a434523f986bb758adc5d40d65a5[m
+Merge: df98008 76154be
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Fri Dec 15 16:59:35 2023 +0200
+
+    Merge pull request #35 from 0x-r4bbit/patch-1
+    
+    Update config key for arbitrum
+
+[33mcommit 76154be54ccf34cdf1f8da0b6c97dfc767866fb0[m
+Author: r4bbit <445106+0x-r4bbit@users.noreply.github.com>
+Date:   Fri Dec 15 12:14:19 2023 +0100
+
+    Update config key for arbitrum
+    
+    Turns out `arbitrum_one` is not actually supported.
+    For more information, see: https://github.com/foundry-rs/foundry/issues/6580#issuecomment-1852293473
+
+[33mcommit df980088181d556a01a2edf01546cd9e112b2447[m
+Author: Paul Razvan Berg <paul.razvan.berg@gmail.com>
+Date:   Sat Oct 14 13:19:43 2023 +0100
+
+    chore: update full reference URL
+
+[33mcommit 359a472e4fd39f7bf7924c76d5e06cded372d857[m
+Author: Paul Razvan
