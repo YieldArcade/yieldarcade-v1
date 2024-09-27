@@ -5,6 +5,10 @@ import { Registry } from "./Registry.sol";
 import { YieldArcadeVault } from "./YieldArcadeVault.sol";
 
 contract YieldArcadeFactory {
+    error Factory__InvalidPercentageComposition();
+
+    error Factory__InvalidArrayLength();
+
     /// @notice Address of the platform's registry contract.
     Registry public immutable registry;
 
@@ -28,7 +32,7 @@ contract YieldArcadeFactory {
         external
         returns (address vault)
     {
-        if (protocols.length != percentages.length) revert();
+        if (protocols.length != percentages.length) revert Factory__InvalidArrayLength();
 
         uint16 i;
         uint16 totalPercentage;
@@ -44,7 +48,7 @@ contract YieldArcadeFactory {
         }
 
         // Make sure accumulated percentage should be 100% of amount
-        if (totalPercentage != BASIS_POINTS_DIVISOR) revert();
+        if (totalPercentage != BASIS_POINTS_DIVISOR) revert Factory__InvalidPercentageComposition();
 
         vault = address(
             new YieldArcadeVault{ salt: keccak256(abi.encodePacked("d")) }(
