@@ -19,7 +19,16 @@ contract YieldArcadeFactory {
         uint16[] depositPercent;
     }
 
-    mapping(address => StrategyState) internal strategies;
+    struct StrategyStateId {
+        uint16 stakingProtocolId;
+        uint16 depositPercentage;
+        uint16[] restakingProtocolIds;
+        uint16[] restakingDepositPercentage;
+    }
+
+    mapping(address => StrategyStateId[]) internal strategies;
+
+    // mapping(address => StrategyStateId[]) internal strategy;
 
     constructor(Registry _registry) {
         registry = _registry;
@@ -27,7 +36,8 @@ contract YieldArcadeFactory {
 
     function createStrategy(
         uint16[] calldata protocols,
-        uint16[] calldata percentages
+        uint16[] calldata percentages,
+        StrategyStateId[] calldata ids
     )
         external
         returns (address vault)
@@ -35,31 +45,43 @@ contract YieldArcadeFactory {
         if (protocols.length != percentages.length) revert Factory__InvalidArrayLength();
 
         uint16 i;
-        uint16 totalPercentage;
+        address adaptor;
+        uint16 stakingPercentage;
+        uint16 restakingPercentage;
 
-        for (i = 0; i < protocols.length; i++) {
-            address adaptor = registry.getAddress(protocols[i]);
-            // Make sure adaptor is trusted.
-            registry.revertIfAdaptorIsNotTrusted(adaptor);
-        }
+        for (i = 0; i < ids.length; i++) {
+            if (ids[i].stakingProtocolId != 0) {
+                // Make sure staking adaptor is trusted.
+                adaptor = registry.getAddress(ids[i].stakingProtocolId);
+                registry.revertIfAdaptorIsNotTrusted(adaptor);
 
-        for (i = 0; i < percentages.length; i++) {
-            totalPercentage += percentages[i];
+                stakingPercentage += ids[i].depositPercentage;
+            }
+
+            for (uint256 j = 0; j < ids[i].restakingProtocolIds.length; j++) {
+                // Make sure restaking adaptor is trusted.
+                adaptor = registry.getAddress(ids[i].restakingProtocolIds[j]);
+                registry.revertIfAdaptorIsNotTrusted(adaptor);
+
+                restakingPercentage += ids[i].restakingDepositPercentage[j];
+            }
+
+            if (restakingPercentage > 0) {
+                if (restakingPercentage != BASIS_POINTS_DIVISOR) revert Factory__InvalidPercentageComposition();
+            }
         }
 
         // Make sure accumulated percentage should be 100% of amount
-        if (totalPercentage != BASIS_POINTS_DIVISOR) revert Factory__InvalidPercentageComposition();
+        if (stakingPercentage > 0) {
+            if (stakingPercentage != BASIS_POINTS_DIVISOR) revert Factory__InvalidPercentageComposition();
+        }
 
-        vault = address(
-            new YieldArcadeVault{ salt: keccak256(abi.encodePacked("d")) }(
-                registry, protocols, percentages, "YAV", "Vault", 18
-            )
-        );
+        vault = address(new YieldArcadeVault{ salt: keccak256(abi.encodePacked("d")) }(registry, "YAV", "Vault", 18));
 
-        strategies[vault] = StrategyState({ protocolIds: protocols, depositPercent: percentages });
+        // strategies[vault] = ids;
     }
 
     function getVaultComposition(address vault) external view returns (StrategyState memory) {
-        return strategies[vault];
+        // return strategies[vault];
     }
 }
