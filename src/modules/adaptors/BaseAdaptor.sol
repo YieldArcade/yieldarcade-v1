@@ -10,23 +10,29 @@ import { SafeTransferLib } from "@solmate/utils/SafeTransferLib.sol";
 /// @notice Base contract all adaptors must inherit from.
 /// @dev Allows vaults to interact with arbritrary DeFi assets and protocols.
 /// @author 0xMudassir
-abstract contract BaseAdaptor is IBaseAdaptor {
+abstract contract BaseAdaptor {
     using SafeTransferLib for ERC20;
+
+    address internal constant NATIVE = address(0);
 
     /// @notice Function vaults call to deposit users funds into protocol.
     /// @param amount the amount of assets to deposit
     /// @param adaptorData data needed to deposit into a protocol
-    function deposit(uint256 amount, bytes memory adaptorData) public virtual;
+    function deposit(address tokenIn, uint256 amount, bytes memory adaptorData) external virtual;
 
     /// @notice Function vaults call to withdraw funds from protocol to send to users.
     /// @param receiver the address that should receive withdrawn funds
     /// @param adaptorData data needed to withdraw from a position
-    function withdraw(uint256 amount, address receiver, bytes memory adaptorData) public virtual;
+    function withdraw(address receiver, uint256 amount, bytes memory adaptorData) external virtual;
 
-    /// @notice Function Cellars use to determine the underlying ERC20 asset of a position.
+    function assetInfo(bytes memory adaptorData) external view virtual returns (ERC20, uint8);
+
+    function exchangeRate(uint256 amount) external view virtual returns (uint256);
+
+    /// @notice Function vault use to determine the underlying ERC20 asset of a position.
     /// @param adaptorData data needed to withdraw from a position
     /// @return the underlying ERC20 asset of a position
-    function assetOf(bytes memory adaptorData) public view virtual returns (ERC20);
+    // function assetOf(bytes memory adaptorData) external view virtual returns (ERC20);
 
     /// @notice Helper function that checks if `spender` has any more approval for `asset`, and if so revokes it.
     function _revokeExternalApproval(ERC20 asset, address spender) internal {
