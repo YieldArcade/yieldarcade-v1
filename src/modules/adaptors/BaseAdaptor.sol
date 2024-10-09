@@ -13,17 +13,15 @@ import { SafeTransferLib } from "@solmate/utils/SafeTransferLib.sol";
 abstract contract BaseAdaptor {
     using SafeTransferLib for ERC20;
 
-    address internal constant NATIVE = address(0);
-
     /// @notice Function vaults call to deposit users funds into protocol.
     /// @param amount the amount of assets to deposit
     /// @param adaptorData data needed to deposit into a protocol
-    function deposit(address tokenIn, uint256 amount, bytes memory adaptorData) external virtual;
+    function deposit(uint256 amount, bytes memory adaptorData) external virtual;
 
-    /// @notice Function vaults call to withdraw funds from protocol to send to users.
-    /// @param receiver the address that should receive withdrawn funds
-    /// @param adaptorData data needed to withdraw from a position
-    function withdraw(address receiver, uint256 amount, bytes memory adaptorData) external virtual;
+    // / @notice Function vaults call to withdraw funds from protocol to send to users.
+    // / @param receiver the address that should receive withdrawn funds
+    // / @param adaptorData data needed to withdraw from a position
+    // function withdraw(address receiver, uint256 amount, bytes memory adaptorData) external virtual;
 
     function assetInfo(bytes memory adaptorData) external view virtual returns (ERC20, uint8);
 
