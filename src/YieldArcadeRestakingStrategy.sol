@@ -17,8 +17,6 @@ import { PriceRouter } from "./modules/PriceRouter.sol";
 contract YieldArcadeRestakingStrategy is ERC20 {
     uint256 private locked = 1;
 
-    address internal constant NATIVE = address(0);
-
     uint256 internal constant MIN_INITIAL_SHARES = 1e9;
 
     uint256 internal constant BASIS_POINTS_DIVISOR = 10_000;
@@ -75,30 +73,21 @@ contract YieldArcadeRestakingStrategy is ERC20 {
     }
 
     /// @notice Deposits assets into the vault, and returns shares to receiver.
-    /// @param amount amount of assets deposited by user.
     /// @param receiver address to receive the shares.
     /// @return shares amount of shares given for deposit.
-    function deposit(
-        address depositAsset,
-        uint256 amount,
-        address receiver
-    )
-        external
-        payable
-        returns (uint256 shares)
-    {
+    function deposit(address receiver) external payable returns (uint256 shares) {
         // calculate shares here
-        shares = _calculateShares(depositAsset, amount);
+        shares = _calculateShares(msg.value);
 
         // deposit in platforms acc to strategy
-        _depositTo(depositAsset, amount);
+        _depositTo(msg.value);
 
         // mint shares w.r.t conversion rate of protocols
         _mint(receiver, shares);
     }
 
     /// @dev Deposit into a protocol according to its ratio type and update related state.
-    function _depositTo(address depositAsset, uint256 amount) internal {
+    function _depositTo(uint256 amount) internal {
         uint256 allocation;
         uint256 remainingAmount = amount;
         uint256 length = protocolIds.length;
@@ -106,7 +95,7 @@ contract YieldArcadeRestakingStrategy is ERC20 {
         for (uint256 i = 0; i < length - 1; i++) {
             allocation = FullMath.mulDiv(amount, protocolPercentage[i], BASIS_POINTS_DIVISOR);
 
-            _makeDepositCall(depositAsset, registry.getAddress(protocolIds[i]), allocation, "");
+            _makeDepositCall(registry.getAddress(protocolIds[i]), allocation, "");
 
             // make sure protocol recipt has been recieved in correct amount
 
@@ -115,27 +104,69 @@ contract YieldArcadeRestakingStrategy is ERC20 {
         }
 
         // deposit remining in last to avoid rounding errors:
-        _makeDepositCall(depositAsset, registry.getAddress(protocolIds.length - 1), remainingAmount, "");
+        _makeDepositCall(registry.getAddress(protocolIds.length - 1), remainingAmount, "");
     }
 
-    /// @notice Internal helper function that accepts an Adaptor Call array, and makes calls to each adaptor.
-    function _makeDepositCall(address depositAsset, address adaptor, uint256 amount, bytes memory data) internal {
+    /// @notice Internal helper function that accepts an Adaptor Call, and makes calls to each adaptor.
+    function _makeDepositCall(address adaptor, uint256 amount, bytes memory data) internal {
         // Make sure adaptor is trusted.
         registry.revertIfAdaptorIsNotTrusted(adaptor);
 
-        if (depositAsset == NATIVE) {
-            IBaseAdaptor(adaptor).deposit{ value: amount }(depositAsset, amount, data);
-        } else {
-            TransferHelper.safeTransferFrom(depositAsset, msg.sender, adaptor, amount);
-
-            IBaseAdaptor(adaptor).deposit(depositAsset, amount, data);
-        }
+        IBaseAdaptor(adaptor).deposit{ value: amount }(data);
     }
 
-    function withdraw(uint256 shares, address recipient) external { }
+    function withdraw(uint256 shares, address recipient) external {
+        if (shares == 0) revert();
 
-    function _mintShares(uint256 _totalDeposited, uint256 _amountDeposited) internal view returns (uint256 shares) {
+        address adaptor;
+        uint256 userTokenShare;
+        uint256 length = protocolIds.length;
+
+        uint256 liquidityShare = FullMath.mulDiv(shares, 1e18, totalSupply);
+
+        for (uint256 i = 0; i < length; i++) {
+            adaptor = registry.getAddress(protocolIds[i]);
+
+            registry.revertIfAdaptorIsNotTrusted(adaptor);
+
+            // reuse adaptor & userTokenShare vars for asset info(tokenAddress, tokenBalanceOfVault)
+            (adaptor, userTokenShare) = _fetchAssetDetails(adaptor);
+
+            // calulcate LRT token share for user
+            userTokenShare = FullMath.mulDiv(userTokenShare, liquidityShare, 1e18);
+
+            // transfer each LRT share
+            TransferHelper.safeTransfer(adaptor, recipient, userTokenShare);
+        }
+
+        _burn(msg.sender, shares);
+    }
+
+    function _getEthReserves(address _adaptor) internal view returns (uint256) {
+        (, uint256 balance) = _fetchAssetDetails(_adaptor);
+
+        return IBaseAdaptor(_adaptor).exchangeRate(balance);
+    }
+
+    function _fetchAssetDetails(address _adaptor) internal view returns (address, uint256) {
+        IBaseAdaptor adaptor = IBaseAdaptor(_adaptor);
+
+        return (address(adaptor.assetInfo("")), adaptor.assetInfo("").balanceOf(address(this)));
+    }
+
+    function _calculateShares(uint256 _amountDeposited) internal view returns (uint256 shares) {
+        address _adaptor;
+        uint256 _totalEth;
+        uint256 _length = protocolIds.length;
         uint256 _existingShareSupply = totalSupply;
+
+        for (uint256 i = 0; i < _length; i++) {
+            _adaptor = registry.getAddress(protocolIds[i]);
+
+            registry.revertIfAdaptorIsNotTrusted(_adaptor);
+
+            _totalEth += _getEthReserves(_adaptor);
+        }
 
         if (_existingShareSupply == 0) {
             // no existing shares, bootstrap at rate 1:1
@@ -144,35 +175,9 @@ contract YieldArcadeRestakingStrategy is ERC20 {
             require(shares > MIN_INITIAL_SHARES, "M");
         } else {
             // shares = existingShareSupply * amountDeposited / totalDeposited;
-            shares = FullMath.mulDiv(_existingShareSupply, _amountDeposited, _totalDeposited);
+            shares = FullMath.mulDiv(_existingShareSupply, _amountDeposited, _totalEth);
 
             require(shares != 0, "0");
-        }
-    }
-
-    function _getEthReserves(address _adaptor) internal view returns (uint256) {
-        IBaseAdaptor adaptor = IBaseAdaptor(_adaptor);
-
-        return adaptor.exchangeRate(adaptor.assetInfo("").balanceOf(address(this)));
-    }
-
-    function _calculateShares(address _tokenIn, uint256 _amountDeposited) internal view returns (uint256 shares) {
-        address adaptor;
-        uint256 totalEth;
-        uint256 length = protocolIds.length;
-
-        for (uint256 i = 0; i < length; i++) {
-            adaptor = registry.getAddress(protocolIds[i]);
-
-            registry.revertIfAdaptorIsNotTrusted(adaptor);
-
-            totalEth += _getEthReserves(adaptor);
-        }
-
-        if (_tokenIn == NATIVE) {
-            shares = _mintShares(totalEth, _amountDeposited);
-        } else {
-            shares = 0;
         }
     }
 }
