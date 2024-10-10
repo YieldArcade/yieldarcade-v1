@@ -14,9 +14,8 @@ abstract contract BaseAdaptor {
     using SafeTransferLib for ERC20;
 
     /// @notice Function vaults call to deposit users funds into protocol.
-    /// @param amount the amount of assets to deposit
     /// @param adaptorData data needed to deposit into a protocol
-    function deposit(uint256 amount, bytes memory adaptorData) external virtual;
+    function deposit(bytes memory adaptorData) external payable virtual;
 
     // / @notice Function vaults call to withdraw funds from protocol to send to users.
     // / @param receiver the address that should receive withdrawn funds

@@ -18,8 +18,8 @@ contract YAeETH is BaseAdaptor {
         liquidityPool = _liquidityPool;
     }
 
-    function deposit(uint256 amount, bytes memory adaptorData) external override {
-        liquidityPool.deposit{ value: amount }();
+    function deposit(bytes memory adaptorData) external payable override {
+        liquidityPool.deposit{ value: msg.value }();
         TransferHelper.safeTransfer(address(eETH), yAStrategy, eETH.balanceOf(address(this)));
     }
 

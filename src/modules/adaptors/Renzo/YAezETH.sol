@@ -34,8 +34,8 @@ contract YAezETH is BaseAdaptor {
         referralId = _referralId;
     }
 
-    function deposit(uint256 amount, bytes memory adaptorData) external override {
-        restakeManager.depositETH{ value: amount }(referralId);
+    function deposit(bytes memory adaptorData) external payable override {
+        restakeManager.depositETH{ value: msg.value }(referralId);
         TransferHelper.safeTransfer(address(ezETH), yAStrategy, ezETH.balanceOf(address(this)));
     }
 

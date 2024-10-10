@@ -4,7 +4,7 @@ pragma solidity =0.8.25;
 import { ERC20 } from "@solmate/tokens/ERC20.sol";
 
 interface IBaseAdaptor {
-    function deposit(address depositAsset, uint256 amount, bytes memory adaptorData) external payable;
+    function deposit(bytes memory adaptorData) external payable;
 
     function withdraw(uint256 amount, address receiver, bytes memory adaptorData) external;
 
