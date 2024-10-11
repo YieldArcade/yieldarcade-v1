@@ -117,11 +117,11 @@ contract YieldArcadeRestakingStrategy is ERC20 {
 
     function withdraw(uint256 shares, address recipient) external {
         if (shares == 0) revert();
+        if (recipient == address(0)) revert();
 
         address adaptor;
         uint256 userTokenShare;
         uint256 length = protocolIds.length;
-
         uint256 liquidityShare = FullMath.mulDiv(shares, 1e18, totalSupply);
 
         for (uint256 i = 0; i < length; i++) {
