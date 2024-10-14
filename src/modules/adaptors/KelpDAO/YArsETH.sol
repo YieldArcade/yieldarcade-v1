@@ -8,8 +8,11 @@ import { TransferHelper } from "../../../libraries/TransferHelper.sol";
 
 import { BaseAdaptor } from "../BaseAdaptor.sol";
 import { ERC20 } from "@solmate/tokens/ERC20.sol";
+import { FixedPointMathLib } from "@solmate/utils/FixedPointMathLib.sol";
 
 contract YAezETH is BaseAdaptor {
+    using FixedPointMathLib for uint256;
+
     /// @notice LRT deposit pool deposits are made to.
     ILRTDepositPool public immutable lrtDepositPool;
 
@@ -38,7 +41,7 @@ contract YAezETH is BaseAdaptor {
         return (rsETH, 18);
     }
 
-    function exchangeRate(uint256 amount) external view override returns (uint256) {
-        return lrtOracle.rsETHPrice(); // update it w.r.t to amount
+    function exchangeRate(uint256 share) external view override returns (uint256) {
+        return share.mulWadUp(lrtOracle.rsETHPrice());
     }
 }

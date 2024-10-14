@@ -8,8 +8,11 @@ import { TransferHelper } from "../../../libraries/TransferHelper.sol";
 
 import { BaseAdaptor } from "../BaseAdaptor.sol";
 import { ERC20 } from "@solmate/tokens/ERC20.sol";
+import { FixedPointMathLib } from "@solmate/utils/FixedPointMathLib.sol";
 
 contract YAezETH is BaseAdaptor {
+    using FixedPointMathLib for uint256;
+
     ERC20 public immutable ezETH;
 
     address public exchangeRateOracle;
@@ -43,7 +46,7 @@ contract YAezETH is BaseAdaptor {
         return (ezETH, 18);
     }
 
-    function exchangeRate(uint256 amount) external view override returns (uint256) {
-        return IRateProvider(exchangeRateOracle).getRate();
+    function exchangeRate(uint256 share) external view override returns (uint256) {
+        return share.mulWadUp(IRateProvider(exchangeRateOracle).getRate());
     }
 }

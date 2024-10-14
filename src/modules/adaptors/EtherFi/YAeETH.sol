@@ -6,8 +6,11 @@ import { TransferHelper } from "../../../libraries/TransferHelper.sol";
 
 import { BaseAdaptor } from "../BaseAdaptor.sol";
 import { ERC20 } from "@solmate/tokens/ERC20.sol";
+import { FixedPointMathLib } from "@solmate/utils/FixedPointMathLib.sol";
 
 contract YAeETH is BaseAdaptor {
+    using FixedPointMathLib for uint256;
+
     ERC20 public immutable eETH;
     address public immutable yAStrategy;
     ILiquidityPool public immutable liquidityPool;
@@ -27,7 +30,7 @@ contract YAeETH is BaseAdaptor {
         return (eETH, 18);
     }
 
-    function exchangeRate(uint256 amount) external view override returns (uint256) {
-        return liquidityPool.sharesForAmount(amount);
+    function exchangeRate(uint256 share) external view override returns (uint256) {
+        return liquidityPool.amountForShare(share);
     }
 }
